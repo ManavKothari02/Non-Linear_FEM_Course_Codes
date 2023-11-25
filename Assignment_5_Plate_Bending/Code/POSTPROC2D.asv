@@ -1,0 +1,48 @@
+function STRESS = POSTPROC2D(ELXY,NDF,NPE,ELU,NGPR,ARRAY)
+
+[GAUSPT,GAUSWT] = Gaus_int(NGPR);
+
+for NI = 1:NGPR
+    for NJ = 1:NGPR
+        [SFL,GDSFL,JAC] = INTERPLN2D(NPE,GAUSPT(NI),GAUSPT(NJ),ELXY);
+        XC = 0;     YC = 0;
+
+        for I = 1:NPE
+            XC = XC + SFL(I)*ELXY(I,1);
+            YC = YC + SFL(I)*ELXY(I,2);
+        end
+    end
+end
+
+E1 = ARRAY(1);      E2 = ARRAY(2);      v12 = ARRAY(3);
+h = ARRAY(4);       G12 = ARRAY(5);     ZC = h/2;
+
+SX = 0;     SY = 0;     DUX = 0;
+DUY = 0;    DVX = 0;    DVY = 0;
+DWX = 0;    DWY = 0;    DSXY = 0;
+DSYX = 0;   DSXX = 0;   DSYY = 0;
+
+for I = 1:NPE
+    J = NDF*(I-1) + 1;
+    J1 = J+1;
+    J2 = J+2;
+    K = J2+1;
+    L = K+1;
+
+    DUX  = DUX+GDSF(1,I)*ELU(J);
+    DUY  = DUY+GDSF(2,I)*ELU(J);
+    DVX  = DVX+GDSF(1,I)*ELU(J1);
+    DVY  = DVY+GDSF(2,I)*ELU(J1);
+    DWX  = DWX+GDSF(1,I)*ELU(J2);
+    DWY  = DWY+GDSF(2,I)*ELU(J2);
+    SX  = SX+SF(I)*ELU(K);
+    SY  = SY+SF(I)*ELU(L);
+    DSXX = DSXX+GDSF(1,I)*ELU(K);
+    DSXY = DSXY+GDSF(2,I)*ELU(K);
+    DSYX = DSYX+GDSF(1,I)*ELU(L);
+    DSYY = DSYY+GDSF(2,I)*ELU(L);
+end
+
+
+
+

@@ -1,0 +1,72 @@
+%% Psuedo Code for Assignment 5
+% Name - Manav kothari 
+% UIN - 133008008
+
+Define all Inputs
+
+Call MeshR function to construct the mesh
+Define DOF_NOD for Assembly of Global Stiffness and Force matrices
+
+Initialize GLK and GLF
+
+for NL = 1:NLS % Load Step Loop
+    calculate load for this particular step
+    while iter<=ITERMAX && convergence == 0 % Initiate iterative loop
+        Define ELU and ELXY from GCU, GPU and ELXY
+    
+        Call FSDTPLTS for ELK and ELF
+    
+        Assemble ELK and ELF matrix in GLK and GLF
+    
+        Apply Boundary conditions using BNDRYUNSYM function
+    
+        Calculate displacement array.
+        update GPU (previous iteration solution)
+    
+        Calculate error
+    end
+
+    Calculate Stresses using POSTPROC2D function
+end
+
+% ----------------------------------------------------%
+
+function FSDTPLTS
+
+Define all required constants A11, A66, D11, etc.
+
+for NI = 1:NGPF
+    for NJ = 1:NGPF % Full integration loop
+        Completely calculate ELF
+        Partially calculate ELK
+    end
+end
+
+for NI = 1:NGPS
+    for NJ = 1:NGPS % Reduced integral to calculate the shear stiffness terms in ELK
+        Partially calculate ELK matrix and add it to the existing ELK terms
+    end
+end
+
+for NI = 1:NGPR
+    for NJ = 1:NGPR % Reduced integration for nonlinear terms in ELK and TANGENT matrix
+        Calculate remaining terms of ELK matrix
+        Calculate required terms of TANGENT matrix (TANG)
+    end
+end
+
+completely calculate the residual and tangent matrix for NI
+end
+
+% ----------------------------------------------------------%
+
+function POSTPROC2D
+
+Compute the coordinates (XC and YC) of the selected elements using ELXY
+
+Compute the differential terms like DUX, DUY, DVX, DSXX, etc.
+
+using the calculated differential terms, calculate the stresses using the formula in the textbook.
+
+end
+
