@@ -1,1 +1,0 @@
-Input file can be opened with "notepad"
